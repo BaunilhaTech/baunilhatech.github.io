@@ -2,7 +2,10 @@
 :root {
   --color-black: #000000;
   --color-white: #ffffff;
-  --color-accent: #00ff00;
+  --color-accent: #f4d03f;
+  --color-vanilla-cream: #faf0e6;
+  --color-vanilla-dark: #d4a574;
+  --color-vanilla-warm: #e8c547;
   --font-primary: "Arial", "Helvetica", sans-serif;
   --font-size-hero: clamp(3rem, 8vw, 8rem);
   --font-size-title: clamp(2rem, 5vw, 4rem);
@@ -137,7 +140,7 @@ body {
 }
 
 .section--light {
-  background-color: var(--color-white);
+  background-color: var(--color-vanilla-cream);
   color: var(--color-black);
 }
 
@@ -176,14 +179,17 @@ body {
 
 .service {
   padding: var(--spacing-lg);
-  border: 2px solid var(--color-black);
+  border: 2px solid var(--color-vanilla-dark);
+  background-color: rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
 }
 
 .service:hover {
-  background-color: var(--color-black);
-  color: var(--color-white);
+  background-color: var(--color-vanilla-warm);
+  color: var(--color-black);
+  border-color: var(--color-accent);
   transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(212, 165, 116, 0.2);
 }
 
 .service__title {
@@ -216,6 +222,7 @@ body {
   background-color: transparent;
   color: var(--color-accent);
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(244, 208, 63, 0.3);
 }
 
 /* Responsive Design */
