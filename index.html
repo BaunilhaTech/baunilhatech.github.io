@@ -1,12 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Baunilha</title>
+    <title>Baunilha — Engenharia Criativa</title>
+    <meta
+      name="description"
+      content="Engenharia Criativa de Software e Hardware"
+    />
   </head>
   <body>
-    <canvas></canvas>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav__logo">BAUNILHA</div>
+      <ul class="nav__menu">
+        <li><a href="#home" class="nav__link">HOME</a></li>
+        <li><a href="#about" class="nav__link">SOBRE</a></li>
+        <li><a href="#services" class="nav__link">SERVIÇOS</a></li>
+        <li><a href="#contact" class="nav__link">CONTATO</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero Section with Fluid Background -->
+    <section id="home" class="hero">
+      <canvas class="hero__canvas"></canvas>
+      <div class="hero__content">
+        <h1 class="hero__title">BAUNILHA</h1>
+        <p class="hero__subtitle">ENGENHARIA CRIATIVA</p>
+        <p class="hero__description">SOFTWARE & HARDWARE</p>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section section--dark">
+      <div class="section__container">
+        <h2 class="section__title">SOBRE</h2>
+        <div class="section__content">
+          <p class="section__text">
+            Transformamos ideias em realidade através da engenharia criativa.
+            Combinamos expertise técnica com visão inovadora para criar soluções
+            em software e hardware.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section section--light">
+      <div class="section__container">
+        <h2 class="section__title">SERVIÇOS</h2>
+        <div class="services__grid">
+          <div class="service">
+            <h3 class="service__title">SOFTWARE</h3>
+            <p class="service__description">
+              Desenvolvimento de aplicações web, mobile e desktop
+            </p>
+          </div>
+          <div class="service">
+            <h3 class="service__title">HARDWARE</h3>
+            <p class="service__description">
+              Prototipagem e desenvolvimento de sistemas embarcados
+            </p>
+          </div>
+          <div class="service">
+            <h3 class="service__title">CONSULTORIA</h3>
+            <p class="service__description">
+              Estratégia tecnológica e arquitetura de sistemas
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section section--dark">
+      <div class="section__container">
+        <h2 class="section__title">CONTATO</h2>
+        <div class="section__content">
+          <p class="section__text">
+            Vamos conversar sobre seu próximo projeto.
+          </p>
+          <a href="mailto:contato@baunilha.dev" class="cta">FALE CONOSCO</a>
+        </div>
+      </div>
+    </section>
+
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>
