@@ -12,6 +12,13 @@ if (!heroCanvas) {
 const fluidSimulation = new FluidEffect(heroCanvas);
 fluidSimulation.start();
 
+const footerCanvas = document.querySelector(".footer__canvas");
+
+if (footerCanvas) {
+  const footerFluidSimulation = new FluidEffect(footerCanvas);
+  footerFluidSimulation.start();
+}
+
 const navigationLinks = document.querySelectorAll(".nav__link");
 
 navigationLinks.forEach((link) => {

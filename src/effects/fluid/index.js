@@ -13,6 +13,7 @@
  */
 
 export { FluidSimulation as FluidEffect } from "./fluid-simulation.js";
+export { FooterFluidSimulation as FooterFluidEffect } from "./footer-fluid-simulation.js";
 
 // Exporta também as configurações padrão para customização
 export const defaultFluidConfig = {
