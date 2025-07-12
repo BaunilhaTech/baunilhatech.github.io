@@ -1,7 +1,7 @@
 import { getWebGLContext } from "./webgl-context.js";
 import { GLProgram, compileShader } from "./gl-program.js";
 import { createFramebuffer, createDoubleFramebuffer } from "./framebuffer.js";
-import { InteractivePointerManager } from "./interactive-pointer.js";
+import { InteractivePointerManager } from "./interactive-pointer-simple.js";
 
 export class FluidSimulation {
   constructor(canvas) {
@@ -464,10 +464,10 @@ export class FluidSimulation {
       (e) => {
         e.preventDefault();
         // Para touch, precisamos converter as coordenadas
-        const touches = Array.from(e.targetTouches).map(touch => ({
+        const touches = Array.from(e.targetTouches).map((touch) => ({
           ...touch,
           clientX: touch.clientX,
-          clientY: touch.clientY
+          clientY: touch.clientY,
         }));
         this.pointerManager.updateTouchPositions(touches, getCanvasRect());
       },
@@ -491,14 +491,13 @@ export class FluidSimulation {
       this.pointerManager.handleTouchEnd(e.changedTouches);
     });
 
-    // Adiciona listener para quando mouse sai da área do canvas
+    // Event listeners para detectar mouse entrando/saindo do canvas
+    this.canvas.addEventListener("mouseenter", () => {
+      this.pointerManager.handleMouseEnter();
+    });
+
     this.canvas.addEventListener("mouseleave", () => {
-      // Reduz intensidade gradualmente quando mouse sai
-      const pointer = this.pointerManager.pointers[0];
-      if (pointer) {
-        pointer.intensity *= 0.5;
-        pointer.moved = false;
-      }
+      this.pointerManager.handleMouseLeave();
     });
   }
 
@@ -549,7 +548,7 @@ export class FluidSimulation {
 
   splatWithRadius(x, y, dx, dy, color, radius = null) {
     const actualRadius = radius || this.config.SPLAT_RADIUS;
-    
+
     this.splatProgram.bind();
     this.gl.uniform1i(
       this.splatProgram.uniforms.uTarget,
@@ -565,17 +564,17 @@ export class FluidSimulation {
       1.0 - y / this.canvas.height
     );
     this.gl.uniform3f(this.splatProgram.uniforms.color, dx, -dy, 1.0);
-    this.gl.uniform1f(
-      this.splatProgram.uniforms.radius,
-      actualRadius
-    );
+    this.gl.uniform1f(this.splatProgram.uniforms.radius, actualRadius);
     this.blit(this.velocity.write[1]);
     this.velocity.swap();
 
     this.gl.uniform1i(this.splatProgram.uniforms.uTarget, this.density.read[2]);
-    
+
     // Aplica cor com intensidade baseada no raio
-    const colorIntensity = Math.min(actualRadius / this.config.SPLAT_RADIUS, 2.0);
+    const colorIntensity = Math.min(
+      actualRadius / this.config.SPLAT_RADIUS,
+      2.0
+    );
     this.gl.uniform3f(
       this.splatProgram.uniforms.color,
       color[0] * 0.3 * colorIntensity,
@@ -651,24 +650,24 @@ export class FluidSimulation {
     this.density.swap();
 
     const movedPointers = this.pointerManager.getMovedPointers();
-    
+
     // Adiciona animação automática quando não há interação
     this.pointerManager.createIdleAnimation();
-    
+
     for (const pointer of movedPointers) {
       // Usa intensidade para controlar força do splat
       const intensity = pointer.intensity || 1.0;
       const adjustedDx = pointer.dx * intensity;
       const adjustedDy = pointer.dy * intensity;
-      
+
       // Ajusta raio baseado na intensidade
       const radius = this.config.SPLAT_RADIUS * (0.5 + intensity * 0.5);
-      
+
       this.splatWithRadius(
-        pointer.x, 
-        pointer.y, 
-        adjustedDx, 
-        adjustedDy, 
+        pointer.x,
+        pointer.y,
+        adjustedDx,
+        adjustedDy,
         pointer.color,
         radius
       );

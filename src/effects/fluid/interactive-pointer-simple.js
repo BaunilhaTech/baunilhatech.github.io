@@ -1,8 +1,7 @@
 /**
- * Interactive Pointer Manager
+ * Interactive Pointer Manager - Versão Simplificada
  *
- * Gerencia interações avançadas do mouse/touch com cores dinâmicas,
- * efeitos de movimento contínuo e interações especiais.
+ * Gerencia interações do mouse/touch com detecção simples e confiável.
  */
 
 export class InteractivePointerManager {
@@ -50,26 +49,23 @@ export class InteractivePointerManager {
   }
 
   updateMousePosition(event, canvasRect) {
+    // Só processa se mouse estiver dentro do canvas
+    if (!this.isMouseInsideCanvas) {
+      return;
+    }
+
     const pointer = this.pointers[0];
     const currentTime = Date.now();
 
-    // Usa offsetX/offsetY para coordenadas mais precisas relativas ao canvas
-    const newX = event.offsetX || event.clientX - canvasRect.left;
-    const newY = event.offsetY || event.clientY - canvasRect.top;
-
-    // Usa detecção inteligente de bordas
-    const wasInside = this.isMouseInsideCanvas;
-    const isInside = this.intelligentBoundaryDetection(newX, newY, canvasRect);
-
-    // Só processa movimento se confirmadamente dentro ou na zona de buffer
-    if (!isInside && !this.isInEdgeZone(newX, newY, canvasRect)) {
-      return; // Completamente fora - não processa
-    }
-
-    // Salva última posição válida
-    if (isInside) {
-      this.lastValidPosition = { x: newX, y: newY };
-    }
+    // Usa offsetX/offsetY para coordenadas mais precisas
+    const newX =
+      event.offsetX !== undefined
+        ? event.offsetX
+        : event.clientX - canvasRect.left;
+    const newY =
+      event.offsetY !== undefined
+        ? event.offsetY
+        : event.clientY - canvasRect.top;
 
     // Calcula velocidade do movimento
     const deltaX = newX - pointer.x;
@@ -89,24 +85,17 @@ export class InteractivePointerManager {
     pointer.dx = deltaX * 8.0; // amplifica movimento para efeito mais visível
     pointer.dy = deltaY * 8.0;
 
-    // Define se deve criar efeito (apenas se confirmadamente dentro)
-    pointer.moved = distance > this.mouseMoveThreshold && isInside;
+    // Define se deve criar efeito
+    pointer.moved = distance > this.mouseMoveThreshold;
 
     // Atualiza cor baseada na velocidade e posição
     this.updateColorBasedOnMovement(pointer, currentTime);
 
-    // Atualiza intensidade baseada na velocidade e posição
-    if (isInside) {
-      pointer.intensity = Math.min(pointer.velocity / 50, 2.0);
-    } else if (this.isInEdgeZone(newX, newY, canvasRect)) {
-      // Reduz intensidade gradualmente na zona de borda
-      pointer.intensity *= 0.8;
-    }
+    // Atualiza intensidade baseada na velocidade
+    pointer.intensity = Math.min(pointer.velocity / 50, 2.0);
 
-    // Adiciona ao trail apenas se dentro
-    if (isInside) {
-      this.updateMouseTrail(pointer);
-    }
+    // Adiciona ao trail
+    this.updateMouseTrail(pointer);
 
     this.lastMouseTime = currentTime;
   }
@@ -203,6 +192,55 @@ export class InteractivePointerManager {
     pointer.intensity = Math.max(pointer.intensity * 0.5, 0.1);
   }
 
+  // Métodos simples e diretos para entrada/saída
+  handleMouseEnter() {
+    this.isMouseInsideCanvas = true;
+    this.clearFadeOutTimer();
+
+    const pointer = this.pointers[0];
+    if (pointer) {
+      pointer.intensity = Math.max(pointer.intensity, 0.1);
+    }
+  }
+
+  handleMouseLeave() {
+    this.isMouseInsideCanvas = false;
+
+    const pointer = this.pointers[0];
+    if (pointer) {
+      pointer.moved = false;
+      // Inicia fade out gradual
+      this.startFadeOut();
+    }
+  }
+
+  startFadeOut() {
+    this.clearFadeOutTimer();
+
+    const fadeOutStep = () => {
+      const pointer = this.pointers[0];
+      if (pointer && !this.isMouseInsideCanvas) {
+        pointer.intensity *= 0.9; // reduz gradualmente
+
+        if (pointer.intensity > 0.01) {
+          this.fadeOutTimer = setTimeout(fadeOutStep, 32); // ~30fps para fade out
+        } else {
+          pointer.intensity = 0;
+          pointer.moved = false;
+        }
+      }
+    };
+
+    fadeOutStep();
+  }
+
+  clearFadeOutTimer() {
+    if (this.fadeOutTimer) {
+      clearTimeout(this.fadeOutTimer);
+      this.fadeOutTimer = null;
+    }
+  }
+
   handleTouchStart(touches, canvasRect) {
     for (let i = 0; i < touches.length; i++) {
       this.ensurePointerExists(i);
@@ -296,7 +334,7 @@ export class InteractivePointerManager {
 
     // Adiciona efeitos de trail para movimento contínuo
     const mainPointer = this.pointers[0];
-    if (mainPointer.trail.length > 1) {
+    if (mainPointer.trail.length > 1 && this.isMouseInsideCanvas) {
       const trailEffects = mainPointer.trail.slice(-3).map((point, index) => ({
         x: point.x,
         y: point.y,
@@ -359,168 +397,5 @@ export class InteractivePointerManager {
       pointer.color =
         this.vanillaColors[Math.floor(time) % this.vanillaColors.length];
     }
-  }
-
-  // Método chamado quando mouse entra no canvas
-  handleMouseEnter() {
-    this.isMouseInsideCanvas = true;
-    this.clearFadeOutTimer();
-
-    const pointer = this.pointers[0];
-    if (pointer) {
-      pointer.intensity = Math.max(pointer.intensity, 0.1);
-    }
-  }
-
-  // Método chamado quando mouse sai do canvas
-  handleMouseLeave() {
-    this.isMouseInsideCanvas = false;
-
-    const pointer = this.pointers[0];
-    if (pointer) {
-      pointer.moved = false;
-      // Inicia fade out gradual
-      this.startFadeOut();
-    }
-  }
-
-  // Inicia fade out gradual quando mouse sai
-  startFadeOut() {
-    this.clearFadeOutTimer();
-
-    const fadeOutStep = () => {
-      const pointer = this.pointers[0];
-      if (pointer && !this.isMouseInsideCanvas) {
-        pointer.intensity *= 0.95; // reduz gradualmente
-
-        if (pointer.intensity > 0.01) {
-          this.fadeOutTimer = setTimeout(fadeOutStep, 16); // ~60fps
-        } else {
-          pointer.intensity = 0;
-          pointer.moved = false;
-        }
-      }
-    };
-
-    fadeOutStep();
-  }
-
-  // Limpa timer de fade out
-  clearFadeOutTimer() {
-    if (this.fadeOutTimer) {
-      clearTimeout(this.fadeOutTimer);
-      this.fadeOutTimer = null;
-    }
-  }
-
-  // Verifica se posição está dentro dos limites do canvas com sistema de buffer
-  isPositionInCanvas(x, y, canvasRect) {
-    const buffer = this.edgeThreshold;
-    return (
-      x >= -buffer &&
-      x <= canvasRect.width + buffer &&
-      y >= -buffer &&
-      y <= canvasRect.height + buffer
-    );
-  }
-
-  // Verifica se está na zona de buffer (próximo às bordas)
-  isInEdgeZone(x, y, canvasRect) {
-    const buffer = this.edgeThreshold;
-    return (
-      (x >= -buffer && x < 0) || // borda esquerda
-      (x > canvasRect.width && x <= canvasRect.width + buffer) || // borda direita
-      (y >= -buffer && y < 0) || // borda superior
-      (y > canvasRect.height && y <= canvasRect.height + buffer) // borda inferior
-    );
-  }
-
-  // Detecção inteligente de saída com debouncing
-  intelligentBoundaryDetection(x, y, canvasRect) {
-    const currentTime = Date.now();
-
-    // Throttle verificações para performance
-    if (currentTime - this.lastBoundaryCheck < this.boundaryCheckInterval) {
-      return this.isMouseInsideCanvas;
-    }
-
-    this.lastBoundaryCheck = currentTime;
-
-    // Verifica se está completamente fora (sem buffer)
-    const isCompletelyOutside =
-      x < -this.edgeThreshold ||
-      x > canvasRect.width + this.edgeThreshold ||
-      y < -this.edgeThreshold ||
-      y > canvasRect.height + this.edgeThreshold;
-
-    if (isCompletelyOutside) {
-      this.confirmMouseLeave();
-      return false;
-    }
-
-    // Verifica se está na zona central (definitivamente dentro)
-    const isInCentralZone =
-      x >= this.edgeThreshold &&
-      x <= canvasRect.width - this.edgeThreshold &&
-      y >= this.edgeThreshold &&
-      y <= canvasRect.height - this.edgeThreshold;
-
-    if (isInCentralZone) {
-      this.confirmMouseEnter();
-      this.edgeDetectionFrames = 0;
-      return true;
-    }
-
-    // Está na zona de borda - requer confirmação
-    if (this.isInEdgeZone(x, y, canvasRect)) {
-      this.edgeDetectionFrames++;
-
-      if (this.edgeDetectionFrames >= this.maxEdgeFrames) {
-        this.confirmMouseLeave();
-        return false;
-      }
-    } else {
-      this.edgeDetectionFrames = 0;
-    }
-
-    return this.isMouseInsideCanvas;
-  }
-
-  // Confirma entrada do mouse com debouncing
-  confirmMouseEnter() {
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = null;
-    }
-
-    if (!this.isMouseInsideCanvas) {
-      this.isMouseInsideCanvas = true;
-      this.clearFadeOutTimer();
-
-      const pointer = this.pointers[0];
-      if (pointer) {
-        pointer.intensity = Math.max(pointer.intensity, 0.1);
-      }
-    }
-  }
-
-  // Confirma saída do mouse com debouncing
-  confirmMouseLeave() {
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-    }
-
-    this.debounceTimer = setTimeout(() => {
-      if (this.isMouseInsideCanvas) {
-        this.isMouseInsideCanvas = false;
-        this.edgeDetectionFrames = 0;
-
-        const pointer = this.pointers[0];
-        if (pointer) {
-          pointer.moved = false;
-          this.startFadeOut();
-        }
-      }
-    }, 50); // 50ms de debounce
   }
 }

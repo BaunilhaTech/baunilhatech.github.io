@@ -99,6 +99,7 @@ body {
   z-index: 2;
   text-align: center;
   color: var(--color-white);
+  pointer-events: none; /* Permite que eventos do mouse passem através do texto */
 }
 
 .hero__title {
