@@ -1,7 +1,6 @@
 import "./style.css";
 import { FluidEffect } from "./effects/fluid/index.js";
 
-// Initialize fluid effect for hero section
 const heroCanvas = document.querySelector(".hero__canvas");
 
 if (!heroCanvas) {
@@ -13,7 +12,6 @@ if (!heroCanvas) {
 const fluidSimulation = new FluidEffect(heroCanvas);
 fluidSimulation.start();
 
-// Smooth scroll navigation
 const navigationLinks = document.querySelectorAll(".nav__link");
 
 navigationLinks.forEach((link) => {
@@ -36,7 +34,6 @@ function handleSmoothScroll(event) {
   });
 }
 
-// Scroll-triggered animations
 const observerOptions = {
   threshold: 0.1,
   rootMargin: "0px 0px -50px 0px",
@@ -55,13 +52,11 @@ function handleSectionObserver(entries) {
   });
 }
 
-// Observe all sections for scroll animations
 const sections = document.querySelectorAll(".section");
 sections.forEach((section) => {
   sectionObserver.observe(section);
 });
 
-// Add scroll-triggered animation styles
 const animationStyles = `
   .section {
     opacity: 0;

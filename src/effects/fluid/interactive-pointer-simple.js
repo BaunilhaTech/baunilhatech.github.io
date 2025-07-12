@@ -9,24 +9,21 @@ export class InteractivePointerManager {
     this.mouseTrail = [];
     this.maxTrailLength = 10;
     this.lastMouseTime = 0;
-    this.mouseMoveThreshold = 2; // movimento mínimo para criar efeito
-    this.isMouseInsideCanvas = false; // controla se mouse está dentro do canvas
-    this.fadeOutTimer = null; // timer para fade out quando mouse sai
+    this.mouseMoveThreshold = 2;
+    this.isMouseInsideCanvas = false;
+    this.fadeOutTimer = null;
 
-    // Paleta de cores baunilha em formato RGB normalizado
     this.vanillaColors = [
-      [0.957, 0.816, 0.247], // #f4d03f - dourado principal
-      [0.831, 0.647, 0.455], // #d4a574 - baunilha escura
-      [0.91, 0.773, 0.278], // #e8c547 - baunilha quente
-      [0.98, 0.941, 0.902], // #faf0e6 - creme claro
-      [1.0, 0.843, 0.0], // #ffd700 - dourado puro
-      [0.855, 0.647, 0.125], // #daa520 - dourado escuro
+      [0.957, 0.816, 0.247], // #f4d03f
+      [0.831, 0.647, 0.455], // #d4a574
+      [0.91, 0.773, 0.278], // #e8c547
+      [0.98, 0.941, 0.902], // #faf0e6
+      [1.0, 0.843, 0.0], // #ffd700
+      [0.855, 0.647, 0.125], // #daa520
     ];
 
     this.currentColorIndex = 0;
     this.colorTransition = 0;
-
-    // Inicializa os pointers DEPOIS das cores
     this.pointers = [this.createPointer()];
   }
 
@@ -49,7 +46,6 @@ export class InteractivePointerManager {
   }
 
   updateMousePosition(event, canvasRect) {
-    // Só processa se mouse estiver dentro do canvas
     if (!this.isMouseInsideCanvas) {
       return;
     }
@@ -57,7 +53,6 @@ export class InteractivePointerManager {
     const pointer = this.pointers[0];
     const currentTime = Date.now();
 
-    // Usa offsetX/offsetY para coordenadas mais precisas
     const newX =
       event.offsetX !== undefined
         ? event.offsetX
@@ -67,49 +62,38 @@ export class InteractivePointerManager {
         ? event.offsetY
         : event.clientY - canvasRect.top;
 
-    // Calcula velocidade do movimento
     const deltaX = newX - pointer.x;
     const deltaY = newY - pointer.y;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     const timeDelta = currentTime - this.lastMouseTime;
 
     if (timeDelta > 0) {
-      pointer.velocity = (distance / timeDelta) * 100; // normaliza velocidade
+      pointer.velocity = (distance / timeDelta) * 100;
     }
 
-    // Atualiza posição
     pointer.lastX = pointer.x;
     pointer.lastY = pointer.y;
     pointer.x = newX;
     pointer.y = newY;
-    pointer.dx = deltaX * 8.0; // amplifica movimento para efeito mais visível
+    pointer.dx = deltaX * 8.0;
     pointer.dy = deltaY * 8.0;
 
-    // Define se deve criar efeito
     pointer.moved = distance > this.mouseMoveThreshold;
 
-    // Atualiza cor baseada na velocidade e posição
     this.updateColorBasedOnMovement(pointer, currentTime);
-
-    // Atualiza intensidade baseada na velocidade
     pointer.intensity = Math.min(pointer.velocity / 50, 2.0);
-
-    // Adiciona ao trail
     this.updateMouseTrail(pointer);
 
     this.lastMouseTime = currentTime;
   }
 
   updateColorBasedOnMovement(pointer, currentTime) {
-    // Muda cor baseada na velocidade
     const velocityFactor = Math.min(pointer.velocity / 100, 1.0);
 
-    // Ciclo de cores mais suave baseado no tempo e movimento
     const timeFactor = (currentTime * 0.001) % (this.vanillaColors.length * 2);
     const colorIndex = Math.floor(timeFactor) % this.vanillaColors.length;
     const nextColorIndex = (colorIndex + 1) % this.vanillaColors.length;
 
-    // Interpola entre cores
     const t = (timeFactor % 1) * velocityFactor;
     const currentColor = this.vanillaColors[colorIndex];
     const nextColor = this.vanillaColors[nextColorIndex];
@@ -120,29 +104,25 @@ export class InteractivePointerManager {
       currentColor[2] * (1 - t) + nextColor[2] * t,
     ];
 
-    // Aumenta saturação com movimento rápido
     if (velocityFactor > 0.5) {
       pointer.color = pointer.color.map((c) => Math.min(c * 1.2, 1.0));
     }
   }
 
   updateMouseTrail(pointer) {
-    // Adiciona posição atual ao trail
     pointer.trail.push({
       x: pointer.x,
       y: pointer.y,
       time: Date.now(),
-      intensity: pointer.intensity * 0.3, // trail mais sutil
+      intensity: pointer.intensity * 0.3,
     });
 
-    // Remove pontos antigos do trail
-    const maxAge = 200; // ms
+    const maxAge = 200;
     const currentTime = Date.now();
     pointer.trail = pointer.trail.filter(
       (point) => currentTime - point.time < maxAge
     );
 
-    // Limita tamanho do trail
     if (pointer.trail.length > this.maxTrailLength) {
       pointer.trail = pointer.trail.slice(-this.maxTrailLength);
     }
@@ -152,16 +132,13 @@ export class InteractivePointerManager {
     const pointer = this.pointers[0];
     pointer.down = true;
 
-    // Cor especial para clique - dourado mais vibrante
-    pointer.color = [1.0, 0.843, 0.0]; // dourado puro
-    pointer.intensity = 3.0; // intensidade máxima para clique
+    pointer.color = [1.0, 0.843, 0.0]; // #ffd700
+    pointer.intensity = 3.0;
 
-    // Cria burst effect no clique
     this.createClickBurst(pointer);
   }
 
   createClickBurst(pointer) {
-    // Cria múltiplos splats em círculo para efeito de explosão
     const burstCount = 8;
     const burstRadius = 50;
 
@@ -170,7 +147,6 @@ export class InteractivePointerManager {
       const offsetX = Math.cos(angle) * burstRadius;
       const offsetY = Math.sin(angle) * burstRadius;
 
-      // Adiciona ponto de burst à lista de efeitos
       this.pointers.push({
         ...this.createPointer(),
         x: pointer.x + offsetX,
@@ -178,7 +154,7 @@ export class InteractivePointerManager {
         dx: offsetX * 0.5,
         dy: offsetY * 0.5,
         moved: true,
-        color: [1.0, 0.843, 0.0], // dourado
+        color: [1.0, 0.843, 0.0], // #ffd700
         intensity: 2.0,
         isBurst: true,
         burstLife: 1.0,
@@ -220,10 +196,10 @@ export class InteractivePointerManager {
     const fadeOutStep = () => {
       const pointer = this.pointers[0];
       if (pointer && !this.isMouseInsideCanvas) {
-        pointer.intensity *= 0.9; // reduz gradualmente
+        pointer.intensity *= 0.9;
 
         if (pointer.intensity > 0.01) {
-          this.fadeOutTimer = setTimeout(fadeOutStep, 32); // ~30fps para fade out
+          this.fadeOutTimer = setTimeout(fadeOutStep, 32);
         } else {
           pointer.intensity = 0;
           pointer.moved = false;
@@ -278,11 +254,9 @@ export class InteractivePointerManager {
       const pointer = this.pointers[i];
       const touch = touches[i];
 
-      // Calcula posição relativa ao canvas
       const newX = touch.clientX - canvasRect.left;
       const newY = touch.clientY - canvasRect.top;
 
-      // Calcula velocidade do movimento
       const deltaX = newX - pointer.x;
       const deltaY = newY - pointer.y;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -292,7 +266,6 @@ export class InteractivePointerManager {
         pointer.velocity = (distance / timeDelta) * 100;
       }
 
-      // Atualiza posição
       pointer.lastX = pointer.x;
       pointer.lastY = pointer.y;
       pointer.x = newX;
@@ -300,14 +273,11 @@ export class InteractivePointerManager {
       pointer.dx = deltaX * 8.0;
       pointer.dy = deltaY * 8.0;
 
-      // Define se deve criar efeito
       pointer.moved = distance > this.mouseMoveThreshold;
 
-      // Atualiza cor e intensidade
       this.updateColorBasedOnMovement(pointer, currentTime);
       pointer.intensity = Math.min(pointer.velocity / 50, 2.0);
 
-      // Atualiza trail
       this.updateMouseTrail(pointer);
     }
 
@@ -315,7 +285,6 @@ export class InteractivePointerManager {
   }
 
   updateBurstEffects() {
-    // Atualiza e remove efeitos de burst
     this.pointers = this.pointers.filter((pointer) => {
       if (pointer.isBurst) {
         pointer.burstLife -= 0.02;
@@ -329,10 +298,8 @@ export class InteractivePointerManager {
   getMovedPointers() {
     this.updateBurstEffects();
 
-    // Retorna ponteiros movidos + trail effects
     const movedPointers = this.pointers.filter((pointer) => pointer.moved);
 
-    // Adiciona efeitos de trail para movimento contínuo
     const mainPointer = this.pointers[0];
     if (mainPointer.trail.length > 1 && this.isMouseInsideCanvas) {
       const trailEffects = mainPointer.trail.slice(-3).map((point, index) => ({
@@ -375,12 +342,10 @@ export class InteractivePointerManager {
     return this.pointers.find((pointer) => pointer.id === id);
   }
 
-  // Método para criar movimento automático quando mouse está parado
   createIdleAnimation() {
     const pointer = this.pointers[0];
     const currentTime = Date.now();
 
-    // Só cria animação idle se mouse NÃO estiver no canvas
     if (
       currentTime - this.lastMouseTime > 3000 &&
       !pointer.down &&
@@ -393,7 +358,7 @@ export class InteractivePointerManager {
       pointer.dx = waveX;
       pointer.dy = waveY;
       pointer.moved = true;
-      pointer.intensity = 0.1; // intensidade muito baixa para idle
+      pointer.intensity = 0.1;
       pointer.color =
         this.vanillaColors[Math.floor(time) % this.vanillaColors.length];
     }

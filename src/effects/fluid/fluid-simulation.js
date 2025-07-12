@@ -452,7 +452,6 @@ export class FluidSimulation {
   }
 
   setupEventListeners() {
-    // Obtém rect do canvas para cálculos de posição precisos
     const getCanvasRect = () => this.canvas.getBoundingClientRect();
 
     this.canvas.addEventListener("mousemove", (e) => {
@@ -463,7 +462,6 @@ export class FluidSimulation {
       "touchmove",
       (e) => {
         e.preventDefault();
-        // Para touch, precisamos converter as coordenadas
         const touches = Array.from(e.targetTouches).map((touch) => ({
           ...touch,
           clientX: touch.clientX,
@@ -491,7 +489,6 @@ export class FluidSimulation {
       this.pointerManager.handleTouchEnd(e.changedTouches);
     });
 
-    // Event listeners para detectar mouse entrando/saindo do canvas
     this.canvas.addEventListener("mouseenter", () => {
       this.pointerManager.handleMouseEnter();
     });
@@ -570,7 +567,6 @@ export class FluidSimulation {
 
     this.gl.uniform1i(this.splatProgram.uniforms.uTarget, this.density.read[2]);
 
-    // Aplica cor com intensidade baseada no raio
     const colorIntensity = Math.min(
       actualRadius / this.config.SPLAT_RADIUS,
       2.0
@@ -651,16 +647,13 @@ export class FluidSimulation {
 
     const movedPointers = this.pointerManager.getMovedPointers();
 
-    // Adiciona animação automática quando não há interação
     this.pointerManager.createIdleAnimation();
 
     for (const pointer of movedPointers) {
-      // Usa intensidade para controlar força do splat
       const intensity = pointer.intensity || 1.0;
       const adjustedDx = pointer.dx * intensity;
       const adjustedDy = pointer.dy * intensity;
 
-      // Ajusta raio baseado na intensidade
       const radius = this.config.SPLAT_RADIUS * (0.5 + intensity * 0.5);
 
       this.splatWithRadius(
