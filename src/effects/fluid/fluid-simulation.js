@@ -1,7 +1,7 @@
 import { getWebGLContext } from "./webgl-context.js";
 import { GLProgram, compileShader } from "./gl-program.js";
 import { createFramebuffer, createDoubleFramebuffer } from "./framebuffer.js";
-import { InteractivePointerManager } from "./interactive-pointer-simple.js";
+import { InteractivePointerManager } from "./interactive-pointer.js";
 
 export class FluidSimulation {
   constructor(canvas) {
