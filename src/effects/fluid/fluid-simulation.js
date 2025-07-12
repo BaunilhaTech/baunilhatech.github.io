@@ -1,7 +1,7 @@
 import { getWebGLContext } from "./webgl-context.js";
 import { GLProgram, compileShader } from "./gl-program.js";
 import { createFramebuffer, createDoubleFramebuffer } from "./framebuffer.js";
-import { PointerManager } from "./pointer-manager.js";
+import { InteractivePointerManager } from "./interactive-pointer.js";
 
 export class FluidSimulation {
   constructor(canvas) {
@@ -26,7 +26,7 @@ export class FluidSimulation {
     this.gl = gl;
     this.ext = ext;
 
-    this.pointerManager = new PointerManager();
+    this.pointerManager = new InteractivePointerManager();
     this.initializeShaders();
     this.initializeFramebuffers();
     this.initializeBlitFunction();
@@ -452,26 +452,35 @@ export class FluidSimulation {
   }
 
   setupEventListeners() {
+    // Obtém rect do canvas para cálculos de posição precisos
+    const getCanvasRect = () => this.canvas.getBoundingClientRect();
+
     this.canvas.addEventListener("mousemove", (e) => {
-      this.pointerManager.updateMousePosition(e);
+      this.pointerManager.updateMousePosition(e, getCanvasRect());
     });
 
     this.canvas.addEventListener(
       "touchmove",
       (e) => {
         e.preventDefault();
-        this.pointerManager.updateTouchPositions(e.targetTouches);
+        // Para touch, precisamos converter as coordenadas
+        const touches = Array.from(e.targetTouches).map(touch => ({
+          ...touch,
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        }));
+        this.pointerManager.updateTouchPositions(touches, getCanvasRect());
       },
       false
     );
 
-    this.canvas.addEventListener("mousedown", () => {
-      this.pointerManager.handleMouseDown();
+    this.canvas.addEventListener("mousedown", (e) => {
+      this.pointerManager.handleMouseDown(e, getCanvasRect());
     });
 
     this.canvas.addEventListener("touchstart", (e) => {
       e.preventDefault();
-      this.pointerManager.handleTouchStart(e.targetTouches);
+      this.pointerManager.handleTouchStart(e.targetTouches, getCanvasRect());
     });
 
     window.addEventListener("mouseup", () => {
@@ -480,6 +489,16 @@ export class FluidSimulation {
 
     window.addEventListener("touchend", (e) => {
       this.pointerManager.handleTouchEnd(e.changedTouches);
+    });
+
+    // Adiciona listener para quando mouse sai da área do canvas
+    this.canvas.addEventListener("mouseleave", () => {
+      // Reduz intensidade gradualmente quando mouse sai
+      const pointer = this.pointerManager.pointers[0];
+      if (pointer) {
+        pointer.intensity *= 0.5;
+        pointer.moved = false;
+      }
     });
   }
 
@@ -523,6 +542,45 @@ export class FluidSimulation {
       color[0] * 0.3,
       color[1] * 0.3,
       color[2] * 0.3
+    );
+    this.blit(this.density.write[1]);
+    this.density.swap();
+  }
+
+  splatWithRadius(x, y, dx, dy, color, radius = null) {
+    const actualRadius = radius || this.config.SPLAT_RADIUS;
+    
+    this.splatProgram.bind();
+    this.gl.uniform1i(
+      this.splatProgram.uniforms.uTarget,
+      this.velocity.read[2]
+    );
+    this.gl.uniform1f(
+      this.splatProgram.uniforms.aspectRatio,
+      this.canvas.width / this.canvas.height
+    );
+    this.gl.uniform2f(
+      this.splatProgram.uniforms.point,
+      x / this.canvas.width,
+      1.0 - y / this.canvas.height
+    );
+    this.gl.uniform3f(this.splatProgram.uniforms.color, dx, -dy, 1.0);
+    this.gl.uniform1f(
+      this.splatProgram.uniforms.radius,
+      actualRadius
+    );
+    this.blit(this.velocity.write[1]);
+    this.velocity.swap();
+
+    this.gl.uniform1i(this.splatProgram.uniforms.uTarget, this.density.read[2]);
+    
+    // Aplica cor com intensidade baseada no raio
+    const colorIntensity = Math.min(actualRadius / this.config.SPLAT_RADIUS, 2.0);
+    this.gl.uniform3f(
+      this.splatProgram.uniforms.color,
+      color[0] * 0.3 * colorIntensity,
+      color[1] * 0.3 * colorIntensity,
+      color[2] * 0.3 * colorIntensity
     );
     this.blit(this.density.write[1]);
     this.density.swap();
@@ -593,8 +651,27 @@ export class FluidSimulation {
     this.density.swap();
 
     const movedPointers = this.pointerManager.getMovedPointers();
+    
+    // Adiciona animação automática quando não há interação
+    this.pointerManager.createIdleAnimation();
+    
     for (const pointer of movedPointers) {
-      this.splat(pointer.x, pointer.y, pointer.dx, pointer.dy, pointer.color);
+      // Usa intensidade para controlar força do splat
+      const intensity = pointer.intensity || 1.0;
+      const adjustedDx = pointer.dx * intensity;
+      const adjustedDy = pointer.dy * intensity;
+      
+      // Ajusta raio baseado na intensidade
+      const radius = this.config.SPLAT_RADIUS * (0.5 + intensity * 0.5);
+      
+      this.splatWithRadius(
+        pointer.x, 
+        pointer.y, 
+        adjustedDx, 
+        adjustedDy, 
+        pointer.color,
+        radius
+      );
     }
     this.pointerManager.resetMovedFlag();
 
