@@ -10,6 +10,7 @@
   --color-dark: #121212;
   --font-primary: "Arial", "Helvetica", sans-serif;
   --font-heading: "Georgia", "Times New Roman", serif;
+  --font-brand: "Playfair Display", serif;
   --font-size-hero: clamp(3rem, 8vw, 8rem);
   --font-size-title: clamp(2rem, 5vw, 4rem);
   --font-size-body: clamp(1rem, 2vw, 1.25rem);
@@ -97,6 +98,34 @@ html {
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+  } /* Logo icons mobile adjustments */
+  .nav__logo-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .nav__logo {
+    gap: 0.44rem; /* Proportional mobile gap */
+  }
+
+  .hero__title {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero__title-icon {
+    width: 5.33rem; /* 1.33x the mobile hero title size ratio */
+    height: 5.33rem;
+  }
+
+  .footer__logo {
+    justify-content: center;
+    gap: 0.44rem; /* Proportional mobile gap */
+  }
+
+  .footer__logo-icon {
+    width: 2.33rem; /* 1.33x proportional to footer font size */
+    height: 2.33rem;
   }
 }
 
@@ -128,9 +157,19 @@ html {
 }
 
 .nav__logo {
-  font-weight: bold;
+  font-family: var(--font-brand);
+  font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav__logo-icon {
+  width: 2rem;
+  height: 2rem;
+  filter: brightness(0) invert(1); /* Ensures white color */
 }
 
 .nav__hamburger {
@@ -215,11 +254,26 @@ html {
 }
 
 .hero__title {
+  font-family: var(--font-brand);
   font-size: var(--font-size-hero);
   font-weight: 900;
   letter-spacing: 8px;
   margin-bottom: var(--spacing-md);
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(
+    1.33rem,
+    2.66vw,
+    2.66rem
+  ); /* Proportional to nav gap (0.5rem -> 1.33rem ratio) */
+}
+
+.hero__title-icon {
+  width: clamp(4rem, 10.6vw, 10.6rem); /* 1.33x the font-size-hero ratio */
+  height: clamp(4rem, 10.6vw, 10.6rem);
+  filter: brightness(0) invert(1); /* Ensures white color */
 }
 
 .hero__subtitle {
@@ -474,12 +528,21 @@ html {
 }
 
 .footer__logo {
-  font-family: var(--font-heading);
+  font-family: var(--font-brand);
   font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 3px;
   color: var(--color-light);
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1.33vw, 0.83rem); /* Proportional to nav gap */
+}
+
+.footer__logo-icon {
+  width: clamp(2rem, 5.33vw, 3.33rem); /* 1.33x the font-size ratio */
+  height: clamp(2rem, 5.33vw, 3.33rem);
+  filter: brightness(0) invert(1); /* Ensures white color */
 }
 
 .footer__tagline {
@@ -498,6 +561,26 @@ html {
   color: var(--color-text-muted);
   margin: 0.25rem 0;
   letter-spacing: 0.5px;
+}
+
+/* SVG icon optimization */
+.nav__logo-icon,
+.hero__title-icon,
+.footer__logo-icon {
+  flex-shrink: 0; /* Prevents icon from shrinking */
+  transition: transform 0.3s ease;
+}
+
+.nav__logo:hover .nav__logo-icon,
+.footer__logo:hover .footer__logo-icon {
+  transform: scale(1.05);
+}
+
+/* Brand font optimization */
+.nav__logo,
+.hero__title,
+.footer__logo {
+  font-display: swap; /* Ensures text remains visible during webfont load */
 }
 
 /* Responsive Design */
