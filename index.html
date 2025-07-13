@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Galada&family=Inter:wght@100;200;300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -20,8 +20,7 @@
     <!-- Navigation -->
     <nav class="nav">
       <div class="nav__logo">
-        <img src="/baunilha-white.svg" alt="Baunilha" class="nav__logo-icon" />
-        <span class="nav__logo-text">BAUNILHA</span>
+        <img src="/baunilha-white.svg" alt="Baunilha" class="nav__logo-full" />
       </div>
       <button class="nav__hamburger" aria-label="Menu">
         <span class="nav__hamburger-line"></span>
@@ -29,10 +28,10 @@
         <span class="nav__hamburger-line"></span>
       </button>
       <ul class="nav__menu">
-        <li><a href="#home" class="nav__link">HOME</a></li>
-        <li><a href="#about" class="nav__link">SOBRE</a></li>
-        <li><a href="#services" class="nav__link">SERVIÇOS</a></li>
-        <li><a href="#contact" class="nav__link">CONTATO</a></li>
+        <li><a href="#home" class="nav__link">Home</a></li>
+        <li><a href="#about" class="nav__link">Sobre</a></li>
+        <li><a href="#services" class="nav__link">Serviços</a></li>
+        <li><a href="#contact" class="nav__link">Contato</a></li>
       </ul>
     </nav>
 
@@ -40,20 +39,26 @@
     <section id="home" class="hero">
       <canvas class="hero__canvas"></canvas>
       <div class="hero__content">
-        <h1 class="hero__title">
+        <div class="hero__brand">
+          <div class="hero__icon">
+            <img
+              src="/icone-baunilha-white.svg"
+              alt="Baunilha Icon"
+              class="hero__icon-img"
+            />
+          </div>
           <img
-            src="/baunilha-white.svg"
-            alt="Baunilha"
-            class="hero__title-icon"
+            src="/fonte-baunilha-white.svg"
+            alt="Baunilha Logo Texto"
+            class="hero__icon-img"
           />
-          <span class="hero__title-text">BAUNILHA</span>
-        </h1>
-        <p class="hero__subtitle">Engenharia Criativa</p>
-        <p class="hero__description">Software & Hardware</p>
+          <p class="hero__subtitle">Engenharia Criativa</p>
+          <p class="hero__description">Software & Hardware</p>
+        </div>
       </div>
       <div class="hero__scroll-zone">
         <div class="scroll-zone__content">
-          <span class="scroll-zone__text">DESLIZE PARA BAIXO</span>
+          <span class="scroll-zone__text">Deslize para baixo</span>
           <div class="scroll-zone__arrow"></div>
         </div>
       </div>
@@ -62,7 +67,7 @@
     <!-- About Section -->
     <section id="about" class="section section--dark">
       <div class="section__container">
-        <h2 class="section__title">SOBRE</h2>
+        <h2 class="section__title">Sobre</h2>
         <div class="section__content">
           <p class="section__text">
             No universo da tecnologia, o termo "vanilla" descreve a essência de
@@ -84,22 +89,22 @@
     <!-- Services Section -->
     <section id="services" class="section section--light">
       <div class="section__container">
-        <h2 class="section__title">SERVIÇOS</h2>
+        <h2 class="section__title">Serviços</h2>
         <div class="services__grid">
           <div class="service">
-            <h3 class="service__title">SOFTWARE</h3>
+            <h3 class="service__title">Software</h3>
             <p class="service__description">
               Desenvolvimento de aplicações web, mobile e desktop
             </p>
           </div>
           <div class="service">
-            <h3 class="service__title">HARDWARE</h3>
+            <h3 class="service__title">Hardware</h3>
             <p class="service__description">
               Prototipagem e desenvolvimento de sistemas embarcados
             </p>
           </div>
           <div class="service">
-            <h3 class="service__title">CONSULTORIA</h3>
+            <h3 class="service__title">Consultoria</h3>
             <p class="service__description">
               Estratégia tecnológica e arquitetura de sistemas
             </p>
@@ -111,12 +116,12 @@
     <!-- Contact Section -->
     <section id="contact" class="section section--dark">
       <div class="section__container">
-        <h2 class="section__title">CONTATO</h2>
+        <h2 class="section__title">Contato</h2>
         <div class="section__content">
           <p class="section__text">
             Vamos conversar sobre seu próximo projeto.
           </p>
-          <a href="mailto:contato@baunilha.dev" class="cta">FALE CONOSCO</a>
+          <a href="mailto:contato@baunilha.dev" class="cta">Fale Conosco</a>
         </div>
       </div>
     </section>
@@ -125,27 +130,26 @@
     <footer class="footer">
       <canvas class="footer__canvas"></canvas>
       <div class="footer__content">
-        <div class="footer__brand">
-          <h3 class="footer__logo">
-            <img
-              src="/baunilha-white.svg"
-              alt="Baunilha"
-              class="footer__logo-icon"
-            />
-            <span class="footer__logo-text">BAUNILHA</span>
-          </h3>
-          <p class="footer__tagline">Engenharia Criativa</p>
-        </div>
         <div class="footer__info">
           <p class="footer__text">
             © 2025 Baunilha. Todos os direitos reservados.
           </p>
           <p class="footer__text">contato@baunilha.dev</p>
         </div>
+        <div class="footer__brand">
+          <h3 class="footer__logo">
+            <img
+              src="/fonte-baunilha-white.svg"
+              alt="Baunilha"
+              class="footer__logo-full"
+            />
+          </h3>
+          <p class="footer__tagline">Engenharia Criativa</p>
+        </div>
       </div>
       <div class="footer__scroll-zone">
         <div class="scroll-zone__content">
-          <span class="scroll-zone__text">SEÇÃO ANTERIOR</span>
+          <span class="scroll-zone__text">Seção anterior</span>
           <div class="scroll-zone__arrow scroll-zone__arrow--up"></div>
         </div>
       </div>

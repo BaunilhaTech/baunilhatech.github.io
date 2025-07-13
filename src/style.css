@@ -8,9 +8,11 @@
   --color-vanilla-extra-dark: #7e674f;
   --color-vanilla-warm: #e8c547;
   --color-dark: #121212;
-  --font-primary: "Arial", "Helvetica", sans-serif;
-  --font-heading: "Georgia", "Times New Roman", serif;
-  --font-brand: "Playfair Display", serif;
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+  --font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+  --font-brand: "Galada", cursive;
   --font-size-hero: clamp(3rem, 8vw, 8rem);
   --font-size-title: clamp(2rem, 5vw, 4rem);
   --font-size-body: clamp(1rem, 2vw, 1.25rem);
@@ -32,6 +34,7 @@ html {
 
 body {
   font-family: var(--font-primary);
+  font-weight: 400;
   line-height: 1.6;
   color: var(--color-white);
   background-color: var(--color-black);
@@ -98,34 +101,34 @@ html {
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-  } /* Logo icons mobile adjustments */
-  .nav__logo-icon {
-    width: 1.75rem;
-    height: 1.75rem;
   }
 
-  .nav__logo {
-    gap: 0.44rem; /* Proportional mobile gap */
+  /* Logo mobile adjustments */
+  .nav__logo-full {
+    height: 1.5rem;
+  }
+  .hero__icon-img {
+    height: 3.5rem;
   }
 
   .hero__title {
-    flex-direction: column;
-    gap: 1rem;
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-md);
   }
 
-  .hero__title-icon {
-    width: 5.33rem; /* 1.33x the mobile hero title size ratio */
-    height: 5.33rem;
+  .hero__subtitle {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    letter-spacing: 3px;
   }
 
-  .footer__logo {
-    justify-content: center;
-    gap: 0.44rem; /* Proportional mobile gap */
+  .hero__description {
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    letter-spacing: 1px;
   }
 
-  .footer__logo-icon {
-    width: 2.33rem; /* 1.33x proportional to footer font size */
-    height: 2.33rem;
+  .footer__logo-full {
+    height: 2rem;
   }
 }
 
@@ -157,18 +160,13 @@ html {
 }
 
 .nav__logo {
-  font-family: var(--font-brand);
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 2px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
-.nav__logo-icon {
-  width: 2rem;
+.nav__logo-full {
   height: 2rem;
+  width: auto;
   filter: brightness(0) invert(1); /* Ensures white color */
 }
 
@@ -214,10 +212,11 @@ html {
 }
 
 .nav__link {
+  font-family: var(--font-primary);
   color: var(--color-white);
   text-decoration: none;
-  font-weight: 500;
-  letter-spacing: 1px;
+  font-weight: 400;
+  letter-spacing: 0px;
   transition: color 0.3s ease;
 }
 
@@ -251,36 +250,56 @@ html {
   text-align: center;
   color: var(--color-white);
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+}
+
+.hero__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.hero__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero__icon-img {
+  height: clamp(4rem, 10vw, 8rem);
+  width: auto;
+  filter: brightness(0) invert(1);
 }
 
 .hero__title {
   font-family: var(--font-brand);
   font-size: var(--font-size-hero);
-  font-weight: 900;
-  letter-spacing: 8px;
+  font-weight: 400;
+  letter-spacing: 4px;
   margin-bottom: var(--spacing-md);
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(
-    1.33rem,
-    2.66vw,
-    2.66rem
-  ); /* Proportional to nav gap (0.5rem -> 1.33rem ratio) */
-}
-
-.hero__title-icon {
-  width: clamp(4rem, 10.6vw, 10.6rem); /* 1.33x the font-size-hero ratio */
-  height: clamp(4rem, 10.6vw, 10.6rem);
-  filter: brightness(0) invert(1); /* Ensures white color */
+  line-height: 0.9;
 }
 
 .hero__subtitle {
+  font-family: var(--font-heading);
   font-size: var(--font-size-title);
-  font-weight: 300;
-  letter-spacing: 4px;
+  font-weight: 200;
+  letter-spacing: 1px;
   opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.hero__description {
+  font-size: var(--font-size-body);
+  font-weight: 300;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  margin-top: 0.25rem;
 }
 
 .hero__scroll-indicator {
@@ -391,6 +410,17 @@ html {
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Sections */
 .section {
   width: 100vw;
@@ -418,9 +448,10 @@ html {
 }
 
 .section__title {
+  font-family: var(--font-heading);
   font-size: var(--font-size-title);
-  font-weight: 900;
-  letter-spacing: 4px;
+  font-weight: 200;
+  letter-spacing: 0px;
   margin-bottom: var(--spacing-lg);
 }
 
@@ -430,8 +461,9 @@ html {
 }
 
 .section__text {
+  font-family: var(--font-primary);
   font-size: var(--font-size-body);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.8;
   margin-bottom: var(--spacing-lg);
 }
@@ -459,9 +491,10 @@ html {
 }
 
 .service__title {
+  font-family: var(--font-heading);
   font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-weight: 300;
+  letter-spacing: 0px;
   margin-bottom: var(--spacing-md);
 }
 
@@ -473,13 +506,14 @@ html {
 
 /* CTA Button */
 .cta {
+  font-family: var(--font-primary);
   display: inline-block;
   padding: var(--spacing-md) var(--spacing-lg);
   background-color: var(--color-accent);
   color: var(--color-black);
   text-decoration: none;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-weight: 500;
+  letter-spacing: 0px;
   border: 2px solid var(--color-accent);
   transition: all 0.3s ease;
 }
@@ -524,24 +558,18 @@ html {
 }
 
 .footer__brand {
-  text-align: left;
+  text-align: right;
 }
 
 .footer__logo {
-  font-family: var(--font-brand);
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: var(--color-light);
-  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: clamp(0.5rem, 1.33vw, 0.83rem); /* Proportional to nav gap */
+  margin-bottom: 0.5rem;
 }
 
-.footer__logo-icon {
-  width: clamp(2rem, 5.33vw, 3.33rem); /* 1.33x the font-size ratio */
-  height: clamp(2rem, 5.33vw, 3.33rem);
+.footer__logo-full {
+  height: clamp(2.5rem, 6vw, 4rem);
+  width: auto;
   filter: brightness(0) invert(1); /* Ensures white color */
 }
 
@@ -553,7 +581,7 @@ html {
 }
 
 .footer__info {
-  text-align: right;
+  text-align: left;
 }
 
 .footer__text {
@@ -563,16 +591,16 @@ html {
   letter-spacing: 0.5px;
 }
 
-/* SVG icon optimization */
-.nav__logo-icon,
-.hero__title-icon,
-.footer__logo-icon {
-  flex-shrink: 0; /* Prevents icon from shrinking */
+/* SVG optimization */
+.nav__logo-full,
+.hero__icon-img,
+.footer__logo-full {
+  flex-shrink: 0; /* Prevents SVG from shrinking */
   transition: transform 0.3s ease;
 }
 
-.nav__logo:hover .nav__logo-icon,
-.footer__logo:hover .footer__logo-icon {
+.nav__logo:hover .nav__logo-full,
+.footer__logo:hover .footer__logo-full {
   transform: scale(1.05);
 }
 
@@ -621,10 +649,6 @@ html {
   .hero__scroll-zone,
   .footer__scroll-zone {
     display: block;
-  }
-
-  .hero__title {
-    letter-spacing: 4px;
   }
 
   .hero__subtitle {

@@ -499,7 +499,6 @@ document.head.appendChild(styleSheet);
 
 // Initialize all functionality when DOM is ready
 document.addEventListener("DOMContentLoaded", function () {
-  initializeFluidEffect();
   initializeMobileMenu();
   initializeScrollZones();
   initializeAutoHideNavigation();
