@@ -461,7 +461,6 @@ export class FluidSimulation {
     this.canvas.addEventListener(
       "touchmove",
       (e) => {
-        e.preventDefault();
         const touches = Array.from(e.targetTouches).map((touch) => ({
           ...touch,
           clientX: touch.clientX,
@@ -469,17 +468,20 @@ export class FluidSimulation {
         }));
         this.pointerManager.updateTouchPositions(touches, getCanvasRect());
       },
-      false
+      { passive: true }
     );
 
     this.canvas.addEventListener("mousedown", (e) => {
       this.pointerManager.handleMouseDown(e, getCanvasRect());
     });
 
-    this.canvas.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      this.pointerManager.handleTouchStart(e.targetTouches, getCanvasRect());
-    });
+    this.canvas.addEventListener(
+      "touchstart",
+      (e) => {
+        this.pointerManager.handleTouchStart(e.targetTouches, getCanvasRect());
+      },
+      { passive: true }
+    );
 
     window.addEventListener("mouseup", () => {
       this.pointerManager.handleMouseUp();
