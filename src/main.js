@@ -1,5 +1,6 @@
 import "./style.css";
 import { FluidEffect } from "./effects/fluid/index.js";
+import { Rive } from "@rive-app/webgl2";
 
 const heroCanvas = document.querySelector(".hero__canvas");
 
@@ -17,6 +18,170 @@ const footerCanvas = document.querySelector(".footer__canvas");
 if (footerCanvas) {
   const footerFluidSimulation = new FluidEffect(footerCanvas);
   footerFluidSimulation.start();
+}
+
+// Inicializar animação Rive
+const riveCanvas = document.querySelector("#rive-canvas");
+
+// Função para configurar interatividade com mouse
+function setupInteractivity(riveInstance, canvas, stateMachineName) {
+  console.log(
+    `🎮 Configurando interatividade para state machine: ${stateMachineName}`
+  );
+
+  try {
+    const inputs = riveInstance.stateMachineInputs(stateMachineName);
+
+    if (!inputs || inputs.length === 0) {
+      console.log("ℹ️  Nenhum input encontrado na state machine");
+      return;
+    }
+
+    console.log(
+      "🎯 Inputs encontrados:",
+      inputs.map((i) => `${i.name} (${i.type})`)
+    );
+
+    // Procurar por inputs comuns de mouse
+    const hoverInput = inputs.find(
+      (i) =>
+        i.name.toLowerCase().includes("hover") ||
+        i.name.toLowerCase().includes("mouse")
+    );
+
+    const clickInput = inputs.find(
+      (i) =>
+        i.name.toLowerCase().includes("click") ||
+        i.name.toLowerCase().includes("trigger") ||
+        i.name.toLowerCase().includes("tap")
+    );
+
+    const positionXInput = inputs.find(
+      (i) =>
+        i.name.toLowerCase().includes("x") ||
+        i.name.toLowerCase().includes("posx")
+    );
+
+    const positionYInput = inputs.find(
+      (i) =>
+        i.name.toLowerCase().includes("y") ||
+        i.name.toLowerCase().includes("posy")
+    );
+
+    // Configurar eventos de hover
+    if (hoverInput) {
+      console.log(`✅ Configurando hover input: ${hoverInput.name}`);
+      canvas.addEventListener("mouseenter", () => {
+        if (hoverInput.type === "Boolean") {
+          hoverInput.value = true;
+        }
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        if (hoverInput.type === "Boolean") {
+          hoverInput.value = false;
+        }
+      });
+    }
+
+    // Configurar eventos de click
+    if (clickInput) {
+      console.log(`✅ Configurando click input: ${clickInput.name}`);
+      canvas.addEventListener("click", () => {
+        if (clickInput.type === "Trigger") {
+          clickInput.fire();
+        } else if (clickInput.type === "Boolean") {
+          clickInput.value = !clickInput.value;
+        }
+      });
+    }
+
+    // Configurar posição do mouse
+    if (positionXInput || positionYInput) {
+      console.log(
+        `✅ Configurando mouse position - X: ${positionXInput?.name}, Y: ${positionYInput?.name}`
+      );
+      canvas.addEventListener("mousemove", (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100; // 0-100
+        const y = ((event.clientY - rect.top) / rect.height) * 100; // 0-100
+
+        if (positionXInput && positionXInput.type === "Number") {
+          positionXInput.value = x;
+        }
+
+        if (positionYInput && positionYInput.type === "Number") {
+          positionYInput.value = y;
+        }
+      });
+    }
+
+    // Se não encontrar inputs específicos, listar todos para debug
+    if (!hoverInput && !clickInput && !positionXInput && !positionYInput) {
+      console.log("🔍 Inputs disponíveis para configuração manual:");
+      inputs.forEach((input) => {
+        console.log(`- ${input.name} (tipo: ${input.type})`);
+      });
+    }
+  } catch (error) {
+    console.error("❌ Erro ao configurar interatividade:", error);
+  }
+}
+
+if (riveCanvas) {
+  console.log("Canvas encontrado, carregando Rive...");
+
+  // Verificar se o arquivo existe primeiro
+  fetch("/experimental_ui.riv")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Arquivo não encontrado: ${response.status}`);
+      }
+      console.log("✅ Arquivo .riv encontrado, carregando...");
+
+      const riveInstance = new Rive({
+        src: "/experimental_ui.riv",
+        canvas: riveCanvas,
+        autoplay: true,
+        useOffscreenRenderer: true,
+        stateMachines: "State Machine 1", // Vamos especificar a state machine
+        onLoad: () => {
+          console.log("✅ Animação Rive carregada com sucesso!");
+          riveInstance.resizeDrawingSurfaceToCanvas();
+
+          // Configurar interatividade diretamente
+          setupInteractivity(riveInstance, riveCanvas, "State Machine 1");
+        },
+        onLoadError: (error) => {
+          console.error("❌ Erro ao carregar animação Rive:", error);
+        },
+        onPlay: () => {
+          console.log("▶️ Animação iniciada");
+        },
+        onPause: () => {
+          console.log("⏸️ Animação pausada");
+        },
+      });
+
+      // Redimensionar quando a janela mudar de tamanho
+      window.addEventListener("resize", () => {
+        if (riveInstance) {
+          riveInstance.resizeDrawingSurfaceToCanvas();
+        }
+      });
+
+      // Cleanup quando a página for descarregada
+      window.addEventListener("beforeunload", () => {
+        if (riveInstance) {
+          riveInstance.cleanup();
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("❌ Erro ao verificar arquivo .riv:", error);
+    });
+} else {
+  console.error("❌ Canvas #rive-canvas não encontrado!");
 }
 
 const navigationLinks = document.querySelectorAll(".nav__link");

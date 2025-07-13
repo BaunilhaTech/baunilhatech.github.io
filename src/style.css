@@ -441,6 +441,14 @@ html {
   color: var(--color-vanilla-extra-dark);
 }
 
+.section--rive {
+  background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
+  color: var(--color-white);
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
 .section__container {
   max-width: 1200px;
   width: 100%;
@@ -532,6 +540,14 @@ html {
   color: var(--color-accent);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(244, 208, 63, 0.3);
+}
+
+/* Rive Animation Section */
+.rive__canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: transparent;
 }
 
 /* Footer */
