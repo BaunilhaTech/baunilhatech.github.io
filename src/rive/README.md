@@ -125,7 +125,7 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting && !riveAnimation) {
       // Inicializar animação apenas quando visível
-      riveAnimation = new RiveAnimation(riveCanvas, "/experimental_ui.riv");
+      riveAnimation = new RiveAnimation(riveCanvas, "/neomorph_001.riv");
       riveAnimation.initialize();
     }
   });

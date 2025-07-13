@@ -536,29 +536,22 @@ html {
 
 /* Rive Animation Section */
 .services__animation {
-  margin-top: calc(
-    var(--spacing-xl) * -2
-  ); /* Margem negativa superior para subir o Rive */
-  margin-bottom: calc(
-    var(--spacing-lg) * -0.5
-  ); /* Margem negativa para aproximar o título */
+  margin-top: 0;
+  margin-bottom: 0;
   width: 100%;
 }
 
 .rive__canvas {
   width: 100%;
-  height: 800px;
+  height: 400px;
   display: block;
   background: transparent;
-  transform: scale(1.25);
   transform-origin: center;
 }
 
 /* Título dos serviços mais próximo do Rive */
 .services__animation + .section__title {
-  margin-top: calc(
-    var(--spacing-lg) * -2
-  ); /* Margem negativa para entrar no espaço do Rive */
+  margin-top: 0;
   position: relative;
   z-index: 10;
 }
@@ -566,8 +559,6 @@ html {
 @media (max-width: 768px) {
   .rive__canvas {
     height: 300px;
-    transform: scale(1.25);
-    transform-origin: center;
   }
 
   .services__animation {

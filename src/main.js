@@ -132,7 +132,7 @@ if (riveCanvas) {
   console.log("Canvas encontrado, carregando Rive...");
 
   // Verificar se o arquivo existe primeiro
-  fetch("/experimental_ui.riv")
+  fetch("/neomorph_001.riv")
     .then((response) => {
       if (!response.ok) {
         throw new Error(`Arquivo não encontrado: ${response.status}`);
@@ -140,7 +140,7 @@ if (riveCanvas) {
       console.log("✅ Arquivo .riv encontrado, carregando...");
 
       const riveInstance = new Rive({
-        src: "/experimental_ui.riv",
+        src: "/neomorph_001.riv",
         canvas: riveCanvas,
         autoplay: true,
         useOffscreenRenderer: true,
