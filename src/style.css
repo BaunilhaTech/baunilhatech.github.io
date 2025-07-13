@@ -441,14 +441,6 @@ html {
   color: var(--color-vanilla-extra-dark);
 }
 
-.section--rive {
-  background: linear-gradient(135deg, var(--color-dark) 0%, #1a1a1a 100%);
-  color: var(--color-white);
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-}
-
 .section__container {
   max-width: 1200px;
   width: 100%;
@@ -543,11 +535,51 @@ html {
 }
 
 /* Rive Animation Section */
+.services__animation {
+  margin-top: calc(
+    var(--spacing-xl) * -2
+  ); /* Margem negativa superior para subir o Rive */
+  margin-bottom: calc(
+    var(--spacing-lg) * -0.5
+  ); /* Margem negativa para aproximar o título */
+  width: 100%;
+}
+
 .rive__canvas {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 800px;
   display: block;
   background: transparent;
+  transform: scale(1.25);
+  transform-origin: center;
+}
+
+/* Título dos serviços mais próximo do Rive */
+.services__animation + .section__title {
+  margin-top: calc(
+    var(--spacing-lg) * -2
+  ); /* Margem negativa para entrar no espaço do Rive */
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .rive__canvas {
+    height: 300px;
+    transform: scale(1.25);
+    transform-origin: center;
+  }
+
+  .services__animation {
+    margin-top: calc(
+      var(--spacing-lg) * -1
+    ); /* Margem negativa superior no mobile */
+    margin-bottom: calc(var(--spacing-md) * -0.5);
+  }
+
+  .services__animation + .section__title {
+    margin-top: calc(var(--spacing-md) * -1);
+  }
 }
 
 /* Footer */

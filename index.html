@@ -31,7 +31,6 @@
         <li><a href="#home" class="nav__link">Home</a></li>
         <li><a href="#about" class="nav__link">Sobre</a></li>
         <li><a href="#services" class="nav__link">Serviços</a></li>
-        <li><a href="#experience" class="nav__link">Experiência</a></li>
         <li><a href="#contact" class="nav__link">Contato</a></li>
       </ul>
     </nav>
@@ -124,6 +123,11 @@
     <!-- Services Section -->
     <section id="services" class="section section--light">
       <div class="section__container">
+        <!-- Rive Animation -->
+        <div class="services__animation">
+          <canvas id="rive-canvas" class="rive__canvas"></canvas>
+        </div>
+
         <h2 class="section__title">Serviços</h2>
         <div class="services__grid">
           <div class="service">
@@ -146,11 +150,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Interactive Animation Section -->
-    <section id="experience" class="section section--light">
-      <canvas id="rive-canvas" class="rive__canvas"></canvas>
     </section>
 
     <!-- Contact Section -->
