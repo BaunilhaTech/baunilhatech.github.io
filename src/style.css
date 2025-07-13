@@ -35,17 +35,68 @@ body {
   color: var(--color-white);
   background-color: var(--color-black);
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Global smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed nav height */
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-light);
 }
 
 /* Mobile scroll optimization */
 @media (max-width: 768px) {
-  html {
-    touch-action: manipulation;
+  .nav {
+    transition: transform 0.25s ease-out;
   }
 
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    .nav {
+      transition: none;
+    }
+
+    .nav--hidden,
+    .nav--visible {
+      transition: none;
+    }
+  }
+
+  /* Optimize for touch scrolling */
   body {
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+  }
+
+  /* Improve scroll performance */
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 }
 
@@ -63,6 +114,17 @@ body {
   background-color: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.nav--hidden {
+  transform: translateY(-100%);
+}
+
+.nav--visible {
+  transform: translateY(0);
 }
 
 .nav__logo {
@@ -150,6 +212,21 @@ body {
   text-align: center;
   color: var(--color-white);
   pointer-events: none;
+}
+
+.hero__title {
+  font-size: var(--font-size-hero);
+  font-weight: 900;
+  letter-spacing: 8px;
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+}
+
+.hero__subtitle {
+  font-size: var(--font-size-title);
+  font-weight: 300;
+  letter-spacing: 4px;
+  opacity: 0.9;
 }
 
 .hero__scroll-indicator {

@@ -352,12 +352,99 @@ function initializeScrollZoneVisibility() {
   window.addEventListener("resize", updateScrollZoneVisibility);
 }
 
+// Auto-hide navigation
+let lastScrollY = 0;
+let scrollDirection = "up";
+let scrollTimeout = null;
+
+function initializeAutoHideNavigation() {
+  const nav = document.querySelector(".nav");
+
+  if (!nav) return;
+
+  let isScrolling = false;
+
+  function handleScroll() {
+    if (!isScrolling) {
+      window.requestAnimationFrame(updateNavigation);
+      isScrolling = true;
+    }
+  }
+
+  function updateNavigation() {
+    const currentScrollY = window.scrollY;
+    const scrollDelta = currentScrollY - lastScrollY;
+
+    // Don't hide nav at the very top
+    if (currentScrollY <= 10) {
+      nav.classList.remove("nav--hidden");
+      nav.classList.add("nav--visible");
+      lastScrollY = currentScrollY;
+      isScrolling = false;
+      return;
+    }
+
+    // Determine scroll direction with threshold to avoid jitter
+    if (Math.abs(scrollDelta) > 5) {
+      if (scrollDelta > 0) {
+        scrollDirection = "down";
+      } else {
+        scrollDirection = "up";
+      }
+    }
+
+    // Show/hide navigation based on scroll direction
+    if (scrollDirection === "down") {
+      nav.classList.add("nav--hidden");
+      nav.classList.remove("nav--visible");
+    } else {
+      nav.classList.remove("nav--hidden");
+      nav.classList.add("nav--visible");
+    }
+
+    lastScrollY = currentScrollY;
+    isScrolling = false;
+
+    // Clear any existing timeout
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout);
+    }
+
+    // Show nav after scroll stops for better UX
+    scrollTimeout = setTimeout(() => {
+      nav.classList.remove("nav--hidden");
+      nav.classList.add("nav--visible");
+    }, 1500);
+  }
+
+  // Use passive listener for better performance
+  window.addEventListener("scroll", handleScroll, { passive: true });
+
+  // Show nav on mouse movement near top
+  document.addEventListener("mousemove", (event) => {
+    if (event.clientY <= 100) {
+      nav.classList.remove("nav--hidden");
+      nav.classList.add("nav--visible");
+    }
+  });
+
+  // Always show nav when mobile menu is open
+  const hamburger = document.querySelector(".nav__hamburger");
+  if (hamburger) {
+    hamburger.addEventListener("click", () => {
+      nav.classList.remove("nav--hidden");
+      nav.classList.add("nav--visible");
+    });
+  }
+}
+
 // Inicializar funcionalidades
 initializeMobileMenu();
 configureMobileFluidEffect();
 initializeScrollZones();
 initializeScrollZoneVisibility();
 initializeFluidScrollZones();
+initializeAutoHideNavigation();
 
 // Reconfigurar em mudanças de viewport
 window.addEventListener("resize", () => {
@@ -409,3 +496,11 @@ const animationStyles = `
 const styleSheet = document.createElement("style");
 styleSheet.textContent = animationStyles;
 document.head.appendChild(styleSheet);
+
+// Initialize all functionality when DOM is ready
+document.addEventListener("DOMContentLoaded", function () {
+  initializeFluidEffect();
+  initializeMobileMenu();
+  initializeScrollZones();
+  initializeAutoHideNavigation();
+});
