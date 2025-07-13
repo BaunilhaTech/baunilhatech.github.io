@@ -468,6 +468,15 @@ html {
   margin-bottom: var(--spacing-lg);
 }
 
+.section__text ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.section__text li {
+  margin-bottom: 0.5rem;
+}
+
 /* Services Grid */
 .services__grid {
   display: grid;
