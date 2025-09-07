@@ -1,24 +1,24 @@
 import "./style.css";
-import { FluidEffect } from "./effects/fluid/index.js";
+// import { FluidEffect } from "./effects/fluid/index.js";
 import { Rive } from "@rive-app/webgl2";
 
-const heroCanvas = document.querySelector(".hero__canvas");
+// const heroCanvas = document.querySelector(".hero__canvas");
 
-if (!heroCanvas) {
-  throw new Error(
-    "Hero canvas element not found. Make sure the HTML contains a canvas with class 'hero__canvas'."
-  );
-}
+// if (!heroCanvas) {
+//   throw new Error(
+//     "Hero canvas element not found. Make sure the HTML contains a canvas with class 'hero__canvas'."
+//   );
+// }
 
-const fluidSimulation = new FluidEffect(heroCanvas);
-fluidSimulation.start();
+// const fluidSimulation = new FluidEffect(heroCanvas);
+// fluidSimulation.start();
 
-const footerCanvas = document.querySelector(".footer__canvas");
+// const footerCanvas = document.querySelector(".footer__canvas");
 
-if (footerCanvas) {
-  const footerFluidSimulation = new FluidEffect(footerCanvas);
-  footerFluidSimulation.start();
-}
+// if (footerCanvas) {
+//   const footerFluidSimulation = new FluidEffect(footerCanvas);
+//   footerFluidSimulation.start();
+// }
 
 // Inicializar animação Rive
 const riveCanvas = document.querySelector("#rive-canvas");
@@ -284,14 +284,14 @@ function closeMobileMenu() {
   }
 }
 
-function configureMobileFluidEffect() {
-  const isMobile = window.innerWidth <= 768;
+// function configureMobileFluidEffect() {
+//   const isMobile = window.innerWidth <= 768;
 
-  if (isMobile && heroCanvas && fluidSimulation) {
-    // Manter o efeito fluido completo no mobile, apenas restringir as zonas de touch
-    heroCanvas.style.touchAction = "none";
-  }
-}
+//   if (isMobile && heroCanvas && fluidSimulation) {
+//     // Manter o efeito fluido completo no mobile, apenas restringir as zonas de touch
+//     heroCanvas.style.touchAction = "none";
+//   }
+// }
 
 function initializeScrollZones() {
   const heroScrollZone = document.querySelector(".hero__scroll-zone");
@@ -404,44 +404,44 @@ function initializeScrollZones() {
   });
 }
 
-function initializeFluidScrollZones() {
-  const isMobile = () => window.innerWidth <= 768;
+// function initializeFluidScrollZones() {
+//   const isMobile = () => window.innerWidth <= 768;
 
-  if (!isMobile()) return;
+//   if (!isMobile()) return;
 
-  const heroCanvas = document.querySelector(".hero__canvas");
-  const footerCanvas = document.querySelector(".footer__canvas");
-  const heroScrollZone = document.querySelector(".hero__scroll-zone");
-  const footerScrollZone = document.querySelector(".footer__scroll-zone");
+//   const heroCanvas = document.querySelector(".hero__canvas");
+//   const footerCanvas = document.querySelector(".footer__canvas");
+//   const heroScrollZone = document.querySelector(".hero__scroll-zone");
+//   const footerScrollZone = document.querySelector(".footer__scroll-zone");
 
-  // Criar máscaras para evitar interferência do efeito fluido nas zonas de scroll
-  if (heroCanvas && heroScrollZone) {
-    heroCanvas.addEventListener("touchstart", (e) => {
-      const rect = heroCanvas.getBoundingClientRect();
-      const touchY = e.touches[0].clientY - rect.top;
-      const canvasHeight = rect.height;
+//   // Criar máscaras para evitar interferência do efeito fluido nas zonas de scroll
+//   if (heroCanvas && heroScrollZone) {
+//     heroCanvas.addEventListener("touchstart", (e) => {
+//       const rect = heroCanvas.getBoundingClientRect();
+//       const touchY = e.touches[0].clientY - rect.top;
+//       const canvasHeight = rect.height;
 
-      // Se o toque for na zona inferior (últimos 120px), não processar o efeito fluido
-      if (touchY > canvasHeight - 120) {
-        e.stopPropagation();
-        return;
-      }
-    });
-  }
+//       // Se o toque for na zona inferior (últimos 120px), não processar o efeito fluido
+//       if (touchY > canvasHeight - 120) {
+//         e.stopPropagation();
+//         return;
+//       }
+//     });
+//   }
 
-  if (footerCanvas && footerScrollZone) {
-    footerCanvas.addEventListener("touchstart", (e) => {
-      const rect = footerCanvas.getBoundingClientRect();
-      const touchY = e.touches[0].clientY - rect.top;
+//   if (footerCanvas && footerScrollZone) {
+//     footerCanvas.addEventListener("touchstart", (e) => {
+//       const rect = footerCanvas.getBoundingClientRect();
+//       const touchY = e.touches[0].clientY - rect.top;
 
-      // Se o toque for na zona superior (primeiros 120px), não processar o efeito fluido
-      if (touchY < 120) {
-        e.stopPropagation();
-        return;
-      }
-    });
-  }
-}
+//       // Se o toque for na zona superior (primeiros 120px), não processar o efeito fluido
+//       if (touchY < 120) {
+//         e.stopPropagation();
+//         return;
+//       }
+//     });
+//   }
+// }
 
 function initializeScrollIndicator() {
   const scrollIndicator = document.querySelector(".hero__scroll-indicator");
@@ -605,16 +605,16 @@ function initializeAutoHideNavigation() {
 
 // Inicializar funcionalidades
 initializeMobileMenu();
-configureMobileFluidEffect();
+// configureMobileFluidEffect();
 initializeScrollZones();
 initializeScrollZoneVisibility();
-initializeFluidScrollZones();
+// initializeFluidScrollZones();
 initializeAutoHideNavigation();
 
 // Reconfigurar em mudanças de viewport
 window.addEventListener("resize", () => {
-  configureMobileFluidEffect();
-  initializeFluidScrollZones();
+  // configureMobileFluidEffect();
+  // initializeFluidScrollZones();
 });
 
 const observerOptions = {
