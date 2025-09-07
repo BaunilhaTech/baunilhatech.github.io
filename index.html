@@ -33,9 +33,40 @@
     </ul>
   </nav>
 
-  <!-- Hero Section with Fluid Background -->
+  <!-- Hero Section with Fractal Background -->
   <section id="home" class="hero">
-    <canvas class="hero__canvas"></canvas>
+    <svg class="hero__fractal" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="fractalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f4d03f" stop-opacity="0.15" />
+          <stop offset="50%" stop-color="#e8c547" stop-opacity="0.08" />
+          <stop offset="100%" stop-color="#d4a574" stop-opacity="0.03" />
+        </linearGradient>
+      </defs>
+      <g class="fractal-layer">
+        <polygon points="400,50 600,250 400,450 200,250" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
+          opacity="0.6">
+          <animateTransform attributeName="transform" type="rotate" values="0 400 250;360 400 250" dur="60s"
+            repeatCount="indefinite" />
+        </polygon>
+        <polygon points="400,100 550,200 400,350 250,200" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
+          opacity="0.5">
+          <animateTransform attributeName="transform" type="rotate" values="0 400 250;-360 400 250" dur="45s"
+            repeatCount="indefinite" />
+        </polygon>
+        <polygon points="400,150 500,200 400,300 300,200" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
+          opacity="0.4">
+          <animateTransform attributeName="transform" type="rotate" values="0 400 250;360 400 250" dur="30s"
+            repeatCount="indefinite" />
+        </polygon>
+        <circle cx="400" cy="250" r="80" fill="none" stroke="url(#fractalGrad)" stroke-width="1" opacity="0.3">
+          <animate attributeName="r" values="80;90;80" dur="20s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="400" cy="250" r="120" fill="none" stroke="url(#fractalGrad)" stroke-width="0.5" opacity="0.2">
+          <animate attributeName="r" values="120;130;120" dur="25s" repeatCount="indefinite" />
+        </circle>
+      </g>
+    </svg>
     <div class="hero__content">
       <div class="hero__brand">
         <div class="hero__icon">
@@ -155,9 +186,35 @@
     </div>
   </section>
 
-  <!-- Footer with Fluid Background -->
+  <!-- Footer with Fractal Background -->
   <footer class="footer">
-    <canvas class="footer__canvas"></canvas>
+    <svg class="footer__fractal" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="fractalGradFooter" x1="100%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#7e674f" stop-opacity="0.12" />
+          <stop offset="50%" stop-color="#d4a574" stop-opacity="0.06" />
+          <stop offset="100%" stop-color="#f4d03f" stop-opacity="0.02" />
+        </linearGradient>
+      </defs>
+      <g class="fractal-layer">
+        <polygon points="400,100 650,300 400,500 150,300" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1"
+          opacity="0.5">
+          <animateTransform attributeName="transform" type="rotate" values="0 400 300;-360 400 300" dur="50s"
+            repeatCount="indefinite" />
+        </polygon>
+        <polygon points="400,150 600,250 400,400 200,250" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1"
+          opacity="0.4">
+          <animateTransform attributeName="transform" type="rotate" values="0 400 300;360 400 300" dur="40s"
+            repeatCount="indefinite" />
+        </polygon>
+        <circle cx="400" cy="300" r="100" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1" opacity="0.3">
+          <animate attributeName="r" values="100;110;100" dur="18s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="400" cy="300" r="60" fill="none" stroke="url(#fractalGradFooter)" stroke-width="0.8" opacity="0.25">
+          <animate attributeName="r" values="60;70;60" dur="22s" repeatCount="indefinite" />
+        </circle>
+      </g>
+    </svg>
     <div class="footer__content">
       <div class="footer__info">
         <p class="footer__text">
