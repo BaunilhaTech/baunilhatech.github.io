@@ -44,26 +44,20 @@
         </linearGradient>
       </defs>
       <g class="fractal-layer">
-        <polygon points="400,50 600,250 400,450 200,250" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
-          opacity="0.6">
-          <animateTransform attributeName="transform" type="rotate" values="0 400 250;360 400 250" dur="60s"
-            repeatCount="indefinite" />
+        <polygon class="fractal-polygon-1" points="400,50 600,250 400,450 200,250" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
+          opacity="0.6" style="transform-origin: 400px 250px; animation: fractalRotate 60s linear infinite;">
         </polygon>
-        <polygon points="400,100 550,200 400,350 250,200" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
-          opacity="0.5">
-          <animateTransform attributeName="transform" type="rotate" values="0 400 250;-360 400 250" dur="45s"
-            repeatCount="indefinite" />
+        <polygon class="fractal-polygon-2" points="400,100 550,200 400,350 250,200" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
+          opacity="0.5" style="transform-origin: 400px 250px; animation: fractalRotateReverse 45s linear infinite;">
         </polygon>
-        <polygon points="400,150 500,200 400,300 300,200" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
-          opacity="0.4">
-          <animateTransform attributeName="transform" type="rotate" values="0 400 250;360 400 250" dur="30s"
-            repeatCount="indefinite" />
+        <polygon class="fractal-polygon-3" points="400,150 500,200 400,300 300,200" fill="none" stroke="url(#fractalGrad)" stroke-width="1"
+          opacity="0.4" style="transform-origin: 400px 250px; animation: fractalRotate 30s linear infinite;">
         </polygon>
-        <circle cx="400" cy="250" r="80" fill="none" stroke="url(#fractalGrad)" stroke-width="1" opacity="0.3">
-          <animate attributeName="r" values="80;90;80" dur="20s" repeatCount="indefinite" />
+        <circle class="fractal-circle-1" cx="400" cy="250" r="80" fill="none" stroke="url(#fractalGrad)" stroke-width="1" opacity="0.3"
+          style="transform-origin: 400px 250px; animation: fractalPulse 20s ease-in-out infinite;">
         </circle>
-        <circle cx="400" cy="250" r="120" fill="none" stroke="url(#fractalGrad)" stroke-width="0.5" opacity="0.2">
-          <animate attributeName="r" values="120;130;120" dur="25s" repeatCount="indefinite" />
+        <circle class="fractal-circle-2" cx="400" cy="250" r="120" fill="none" stroke="url(#fractalGrad)" stroke-width="0.5" opacity="0.2"
+          style="transform-origin: 400px 250px; animation: fractalPulse 25s ease-in-out infinite;">
         </circle>
       </g>
     </svg>
@@ -197,21 +191,17 @@
         </linearGradient>
       </defs>
       <g class="fractal-layer">
-        <polygon points="400,100 650,300 400,500 150,300" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1"
-          opacity="0.5">
-          <animateTransform attributeName="transform" type="rotate" values="0 400 300;-360 400 300" dur="50s"
-            repeatCount="indefinite" />
+        <polygon class="fractal-polygon-footer-1" points="400,100 650,300 400,500 150,300" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1"
+          opacity="0.5" style="transform-origin: 400px 300px; animation: fractalRotateReverse 50s linear infinite;">
         </polygon>
-        <polygon points="400,150 600,250 400,400 200,250" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1"
-          opacity="0.4">
-          <animateTransform attributeName="transform" type="rotate" values="0 400 300;360 400 300" dur="40s"
-            repeatCount="indefinite" />
+        <polygon class="fractal-polygon-footer-2" points="400,150 600,250 400,400 200,250" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1"
+          opacity="0.4" style="transform-origin: 400px 300px; animation: fractalRotate 40s linear infinite;">
         </polygon>
-        <circle cx="400" cy="300" r="100" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1" opacity="0.3">
-          <animate attributeName="r" values="100;110;100" dur="18s" repeatCount="indefinite" />
+        <circle class="fractal-circle-footer-1" cx="400" cy="300" r="100" fill="none" stroke="url(#fractalGradFooter)" stroke-width="1" opacity="0.3"
+          style="transform-origin: 400px 300px; animation: fractalPulse 18s ease-in-out infinite;">
         </circle>
-        <circle cx="400" cy="300" r="60" fill="none" stroke="url(#fractalGradFooter)" stroke-width="0.8" opacity="0.25">
-          <animate attributeName="r" values="60;70;60" dur="22s" repeatCount="indefinite" />
+        <circle class="fractal-circle-footer-2" cx="400" cy="300" r="60" fill="none" stroke="url(#fractalGradFooter)" stroke-width="0.8" opacity="0.25"
+          style="transform-origin: 400px 300px; animation: fractalPulse 22s ease-in-out infinite;">
         </circle>
       </g>
     </svg>

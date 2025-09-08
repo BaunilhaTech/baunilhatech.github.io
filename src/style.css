@@ -99,6 +99,9 @@ html {
   * {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+  }
+
+  .hero__fractal, .footer__fractal {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
@@ -235,7 +238,8 @@ html {
   overflow: hidden;
 }
 
-.hero__fractal {
+.hero__fractal,
+.footer__fractal {
   position: absolute;
   top: 0;
   left: 0;
@@ -244,6 +248,22 @@ html {
   z-index: 1;
   pointer-events: none;
   opacity: 0.8;
+  shape-rendering: geometricPrecision;
+}
+
+/* Keep stroke thickness readable across scales */
+.hero__fractal *,
+.footer__fractal * {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 768px) {
+  .hero__fractal *,
+  .footer__fractal * {
+    stroke-width: 1.5px; /* avoid vanishing strokes on small viewports */
+  }
 }
 
 .hero__content {
@@ -420,6 +440,33 @@ html {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fractalRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fractalRotateReverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes fractalPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
   }
 }
 
@@ -719,7 +766,7 @@ html {
   .hero__fractal,
   .footer__fractal {
     touch-action: none;
-    opacity: 0.5;
+    /* opacity: 1; Mantém a visibilidade total no mobile */
   }
 
   .hero__content {
